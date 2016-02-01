@@ -98,6 +98,12 @@ try {
 
 if($registrationStatus == "new") { // Registration Status [new]
 
+$incrementPatientNo = ($ro->selectNow("trackingNo","value","name","patientNo") + 1);
+$incrementRegistrationNo = ($ro->selectNow("trackingNo","value","name","registrationNo") + 1);
+$ro->editNow("trackingNo","name","patientNo","value",$incrementPatientNo);
+$ro->editNow("trackingNo","name","registrationNo","value",$incrementRegistrationNo);
+
+
 $ro->addNewPatientRecord($patientNo,$lastname,$firstname,$middlename,$completeName,$ro->calculate_age($birthDate),$patientContact,$birthDate,$gender,$seniorCitizen,$address,$philHealth,$civilStatus,$religion);
 
 if($room == "OPD") {
@@ -121,6 +127,9 @@ $ro->addCharges_cash("UNPAID",$registrationNo,$room,$room,$ro->room_rate(),0,$ro
 
 } // Registration Status [new]
 else {  // Registration Status [old]
+
+$incrementRegistrationNo = ($ro->selectNow("trackingNo","value","name","registrationNo") + 1);
+$ro->editNow("trackingNo","name","registrationNo","value",$incrementRegistrationNo);
 
 $ro->editNow("patientRecord","patientNo",$patientNo,"Age",$ro->calculate_age($birthDate));
 
