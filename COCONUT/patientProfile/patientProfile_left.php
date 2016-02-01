@@ -6,12 +6,15 @@ $username = $_GET['username'];
 
 $ro = new database2();
 
+/*
 $ro->getBatchNo();
 $myFile = $ro->getReportInformation("homeRoot")."/COCONUT/trackingNo/batchNo.dat";
 $fh = fopen($myFile, 'r');
 $batchNo = fread($fh, 100);
 fclose($fh);
+*/
 
+$batchNo = $ro->selectNow("trackingNo","value","name","batchNo");
 
 echo "
 
