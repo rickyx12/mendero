@@ -9786,10 +9786,10 @@ a {  border_bottom:10px; color:black; }
 
 </style>";
 
-$connection = mysqli_connect($this->host,$this->username,$this->password,$this->database);      
+$connection = mysqli_connect($this->myHost,$this->username,$this->password,$this->database);      
 
 
-$result = mysqli_query($connection, "select inventoryCode,description,unitcost from inventory where inventoryType = 'supplies' ") or die("Query fail: " . mysqli_error());
+$result = mysqli_query($connection, "select inventoryCode,description,unitcost from inventory where inventoryType = 'supplies' and status not like 'DELETED%%%%%' ") or die("Query fail: " . mysqli_error());
 
 $this->coconutFormStart("post","http://".$this->getMyUrl()."/COCONUT/Reports/markupPrice1.php");
 echo "<table border=1 cellspacing=0 cellpadding=1>";

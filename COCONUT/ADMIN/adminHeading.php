@@ -184,6 +184,7 @@ window.onload=function() { SetMsg(document.getElementById('searchPatient', false
 
 
                     <li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/Reports/doctorReport/selectShiftBranch.php?username=<?php echo $username; ?>" target="departmentX">Doctor's PF Summary</a></li>
+                     <li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/Reports/markupPrice.php" target="departmentX">Add 50% Markup in Supplies</a></li>
 
 <?php     
   /*         
