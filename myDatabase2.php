@@ -3,6 +3,19 @@ include("myDatabase1.php");
 
 class database2 extends database1 {
 
+
+public $myHost;
+public $username;
+public $password;
+public $database;
+
+public function __construct() {
+  $this->myHost = $_SERVER['DB_HOST'];
+  $this->username = $_SERVER['DB_USER'];
+  $this->password = $_SERVER['DB_PASS'];
+  $this->database = $_SERVER['DB_DB'];
+}
+
 function ENCRYPT_DECRYPT($Str_Message) {
     $Len_Str_Message=STRLEN($Str_Message);
     $Str_Encrypted_Message="";
@@ -9756,6 +9769,53 @@ $this->coconutTableRowStop();
 $this->coconutTableStop();
 }
 
+
+
+
+
+public function readyForMarkup() {
+
+echo "<style>
+
+.matrix {
+font-family:courier;
+}
+
+tr:hover { background-color:yellow; color:black;}
+a {  border_bottom:10px; color:black; }
+
+</style>";
+
+$connection = mysqli_connect($this->host,$this->username,$this->password,$this->database);      
+
+
+$result = mysqli_query($connection, "select inventoryCode,description,unitcost from inventory where inventoryType = 'supplies' ") or die("Query fail: " . mysqli_error());
+
+$this->coconutFormStart("post","http://".$this->getMyUrl()."/COCONUT/Reports/markupPrice1.php");
+echo "<table border=1 cellspacing=0 cellpadding=1>";
+echo "<tr>";
+echo "<th></th>";
+echo "<th></th>";
+echo "<th>Inv#</th>";
+echo "<th>Description</th>";
+echo "<th>Price</th>";
+echo "<th>w/ Markup</th>";
+echo "</tr>";
+while($row = mysqli_fetch_array($result))
+{
+echo "<tr>";
+echo "<th><input type='checkbox' name='inventoryCode[]' value='$row[inventoryCode]'></th>";
+echo "<th><input type='checkbox' name='markup[]' value='".(($row['unitcost'] * .50) + $row['unitcost'])."'></th>";
+echo "<td>".$row['inventoryCode']."</td>";
+echo "<td>".$row['description']."</td>";
+echo "<td>".$row['unitcost']."</td>";
+echo "<td>".(($row['unitcost'] * .50) + $row['unitcost'])."</td>";
+echo "</tr>";
+}
+echo "</table>";
+$this->coconutButton("Proceed");
+$this->coconutFormStop();
+}
 
 
 
