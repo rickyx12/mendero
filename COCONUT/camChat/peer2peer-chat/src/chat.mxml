@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:fx="http://ns.adobe.com/mxml/2009"  layout="absolute" backgroundAlpha="0"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   width="600" height="490" creationComplete="init()">
+<fx:Script source="script.as" />	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<mx:TextArea id="chat_txt"  x="322" y="-1" width="268"
+				 height="455.24985" backgroundAlpha="0.3" borderStyle="none" focusAlpha="0"
+				 selectable="false" wordWrap="true"/>
+	<s:TextInput id="input_txt"  x="322" y="462.35" width="268"
+				 enter="sendText()"/>
+	<s:VideoDisplay id="hisWebcam" visible="{myUser.connectedWithSomeOne}" x="0" y="0"
+					width="320" height="240" scaleMode="none"/>
+	<s:VideoDisplay id="myWebcam" x="0" y="245" width="320" height="236" scaleMode="none"/>
+	<s:TextInput visible="{myConfig.DEBUG}" x="322" y="5" width="229" text="{myUser.idStratus}"/>
+</mx:Application>
