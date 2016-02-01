@@ -11,6 +11,8 @@ $Added = $_GET['Added'];
 $ro = new database1();
 
 $ro->getPatientProfile($registrationNo);
+$incrementBatchNo = ($ro->selectNow("trackingNo","value","name","batchNo") + 1);
+$ro->editNow("trackingNo","name","batchNo","value",$incrementBatchNo);
 
 for( $x=0;$x<$countz;$x++ ) {
 $packageIncluded = preg_split ("/\_/", $ro->selectNow("hospitalPackage","packageIncluded_description","packageNo",$packageNo[$x]) );
