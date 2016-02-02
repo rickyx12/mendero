@@ -2,7 +2,7 @@
 include("../../myDatabase1.php");
 $from  = $_GET['from'];
 $ro = new database1();
-
+/*
 $ro->getRegistrationNo();
 $myFile = $ro->getReportInformation("homeRoot")."/COCONUT/trackingNo/registrationNo.dat";
 $fh = fopen($myFile, 'r');
@@ -14,7 +14,10 @@ $myFile = $ro->getReportInformation("homeRoot")."/COCONUT/trackingNo/patientID.d
 $fh = fopen($myFile, 'r');
 $patientNo = fread($fh, 100);
 fclose($fh);
+*/
 
+$registrationNo = $ro->selectNow("trackingNo","value","name","registrationNo");
+$patientNo = $ro->selectNow("trackingNo","value","name","patientNo");
 
 $ro->coconutDesign();
 
