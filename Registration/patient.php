@@ -3,6 +3,7 @@ include("../myDatabase.php");
 require_once('../COCONUT/authentication.php');
 $registrationNo = $_GET['registrationNo'];
 $username = $_GET['username'];
+$from = $_GET['from'];
 
 /*
 if  (!isset($username) ) {
@@ -43,7 +44,7 @@ $("#breadcrumbs a").hover(
 <ol id="breadcrumbs">
    <li><a href="http://<?php echo $ro->getMyUrl(); ?>/LOGINPAGE/module.php"><font color=white>Home</font><span class="arrow"></span></a></li>
     <li><a href="#" class="odd"><font color=white>Registration</font><span class="arrow"></span></a></li>
-    <li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/opdRegistration.php?module=REGISTRATION"><font color=white>Verify Patient Record</font><span class="arrow"></span></a></li>
+    <li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/opdRegistration.php?module=REGISTRATION&from=<?php echo $from; ?>"><font color=white>Verify Patient Record</font><span class="arrow"></span></a></li>
     <li><a href="#" class="odd"><font color=white><b>Registration Form</b></font><span class="arrow"></span></a></li>
     <li><a href="#">Verify Registration<span class="arrow"></span></a></li>
    <li><a href="#" class="odd"><font color=yellow>Patient<span class="arrow"></span></a></li>

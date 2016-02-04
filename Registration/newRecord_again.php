@@ -136,6 +136,9 @@ $registrationNo = fread($fh, 100);
 fclose($fh);
 */
 $registrationNo = $ro->selectNow("trackingNo","value","name","registrationNo");
+$incrementRegistrationNo = ($ro->selectNow("trackingNo","value","name","registrationNo") + 1);
+$ro->editNow("trackingNo","name","registrationNo","value",$incrementRegistrationNo);
+
 /*
 $ro->getPatientID();
 $myFile = "/opt/lampp/htdocs/COCONUT/trackingNo/patientID.dat";

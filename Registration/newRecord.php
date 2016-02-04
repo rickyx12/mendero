@@ -148,7 +148,10 @@ fclose($fh);
 $patientNo = $ro->selectNow("trackingNo","value","name","patientNo");
 $registrationNo = $ro->selectNow("trackingNo","value","name","registrationNo");
 
-
+$incrementPatientNo = ($ro->selectNow("trackingNo","value","name","patientNo") + 1);
+$incrementRegistrationNo = ($ro->selectNow("trackingNo","value","name","registrationNo") + 1);
+$ro->editNow("trackingNo","name","patientNo","value",$incrementPatientNo);
+$ro->editNow("trackingNo","name","registrationNo","value",$incrementRegistrationNo);
 
 //newRecord_insert.php
 echo "<br><br>";
