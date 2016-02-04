@@ -1738,7 +1738,7 @@ echo "</tr>";
 
 
 echo "<Tr>";
-echo "<td>&nbsp;Discount </tD>";
+echo "<td>&nbsp;<font size=2>".$ro->selectNow("registrationDetails","discountType","registrationNo",$registrationNo)."</font></tD>";
 echo "<td>&nbsp;</tD>";
 echo "<td>&nbsp;</tD>";
 echo "<td>&nbsp;</tD>";
