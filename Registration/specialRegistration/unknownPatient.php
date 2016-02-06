@@ -19,6 +19,11 @@ fclose($fh);
 $registrationNo = $ro->selectNow("trackingNo","value","name","registrationNo");
 $patientNo = $ro->selectNow("trackingNo","value","name","patientNo");
 
+$incrementRegistrationNo = ( $ro->selectNow("trackingNo","value","name","registrationNo") + 1 );
+$incrementPatientNo = ( $ro->selectNow("trackingNo","value","name","patientNo") + 1 );
+$ro->editNow("trackingNo","name","registrationNo","value",$incrementRegistrationNo);
+$ro->editNow("trackingNo","name","patientNo","value",$incrementPatientNo);
+
 $ro->coconutDesign();
 
 
