@@ -87,11 +87,16 @@ $("#breadcrumbs a").hover(
 <?php
 
 if( $status == "new" ) {
+/*
 $ro->getInventoryStockCardNo();
 $myFile = $ro->getReportInformation("homeRoot")."/COCONUT/trackingNo/stockCardNo.dat";
 $fh = fopen($myFile, 'r');
 $stockCardNo = fread($fh, 100);
 fclose($fh);
+*/
+$stockCardNo = $ro->selectNow("trackingNo","value","name","stockCardNo");
+$incrementStockCardNo = ($ro->selectNow("trackingNo","value","name","stockCardNo")+1);
+$ro->editNow("trackingNo","name","stockCardNo","value",$incrementStockCardNo);
 }else {
 $stockCardNo=$oldStockCardNo;
 }
