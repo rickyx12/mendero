@@ -1432,24 +1432,15 @@ echo "<td>&nbsp;".$row['Description']."&nbsp;</td>";
 if( $row['Description'] == "ER FEE" ) {
 $sellingPrice = $row['sellingPrice'];
 }else {
-if( $this->selectNow("registrationDetails","Company","registrationNo",$registrationNo) != "" && $this->getRegistrationDetails_type() == "IPD" && $this->selectNow("availableCharges","addons","chargesCode",$row['chargesCode']) != "no" ) {
+if( $this->selectNow("registrationDetails","Company","registrationNo",$registrationNo) != "" && $this->selectNow("availableCharges","addons","chargesCode",$row['chargesCode']) != "no" ) {
 
-if( $row['Category'] == "LABORATORY" ) { //company addon in laboratory
-$sellingPrice = $row['sellingPrice']; //wala ng addon ang lab
+if( $row['Category'] == "LABORATORY" || $row['Category'] == "RADIOLOGY" ) { //company addon in laboratory
+//$sellingPrice = $row['sellingPrice']; //removed feb 9, 2016
+$sellingPrice = $row['sellingPrice'] + ( $row['sellingPrice'] * 0.25 ); //added feb 9, 2016
 }else {
 //$sellingPrice = $row['sellingPrice'] + ( $row['sellingPrice'] * 0.20 ); //removed feb 25, 2015
 $sellingPrice = $row['sellingPrice'];
 }
-
-}else if( $this->getPatientRecord_phic() == "YES" && $this->getRegistrationDetails_type() == "IPD" && $this->selectNow("registrationDetails","Company","registrationNo",$registrationNo) == "" && $this->selectNow("availableCharges","addons","chargesCode",$row['chargesCode']) != "no" ) {
-
-if( $row['Category'] == "LABORATORY" ) { //company addon in laboratory
-$sellingPrice = $row['sellingPrice']; //wala ng addon ang lab
-}else {
-//$sellingPrice = $row['sellingPrice'] + ( $row['sellingPrice'] * 0.20 ); //removed feb 25,2015
-$sellingPrice = $row['sellingPrice'];
-}
-
 }else {
 $sellingPrice = $row['sellingPrice'];
 }
