@@ -138,8 +138,7 @@ window.onload=function() { SetMsg(document.getElementById('searchPatient', false
 
 <li><a href="../../Forms/SearchOR.php?search=None&type=Payments&username=<?php echo $username; ?>" target="departmentX">Search O.R.</a></li>
 
-<li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/inventory/inventoryList1.php" target="departmentX">Medicine list</a></li>
-
+<li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/inventory/inventoryPerDeptSelect.php" target="departmentX">Inventory Per Dept</a></li>
 
                 </ul>
             	</li>
