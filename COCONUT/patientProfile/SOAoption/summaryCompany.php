@@ -1748,7 +1748,11 @@ echo "</tr>";
 $companyDiscount = $ro->selectNow("registrationDetails","companyDiscount","registrationNo",$registrationNo);
 
 echo "<Tr>";
-echo "<td>&nbsp;Discount </tD>";
+//discount type
+if( $ro->selectNow("registrationDetails","discountType","registrationNo",$registrationNo) != "" ) {
+echo "<td>&nbsp;<font size=2>".$ro->selectNow("registrationDetails","discountType","registrationNo",$registrationNo)."</font></tD>";
+}else { }
+
 echo "<td>&nbsp;</tD>";
 echo "<td>&nbsp;</tD>";
 
