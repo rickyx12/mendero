@@ -1434,7 +1434,7 @@ $sellingPrice = $row['sellingPrice'];
 }else {
 if( $this->selectNow("registrationDetails","Company","registrationNo",$registrationNo) != "" && $this->selectNow("availableCharges","addons","chargesCode",$row['chargesCode']) != "no" ) {
 
-if( $row['Category'] == "LABORATORY" || $row['Category'] == "RADIOLOGY" ) { //company addon in laboratory
+if( $row['Category'] == "LABORATORY" || $row['Category'] == "RADIOLOGY" || $row['Category'] == "CARDIOLOGY" ) { //company addon 
 //$sellingPrice = $row['sellingPrice']; //removed feb 9, 2016
 $sellingPrice = $row['sellingPrice'] + ( $row['sellingPrice'] * 0.25 ); //added feb 9, 2016
 }else {
