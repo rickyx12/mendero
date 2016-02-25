@@ -47,6 +47,7 @@ $package = $_GET['package'];
 $pinNo = $_GET['pinNo'];
 $seniorNo = $_GET['seniorNo'];
 $discountType = $_GET['discountType'];
+$interest = $_GET['interest'];
 $patientTax = $_GET['patientTax'];
 
 if( isset($_GET['CashLIMIT']) ) {
@@ -96,6 +97,7 @@ $ro->EditNow("registrationDetails","registrationNo",$registrationNo,"package",$p
 $ro->EditNow("registrationDetails","registrationNo",$registrationNo,"privateORhouse_case",$typeCase);
 $ro->EditNow("registrationDetails","registrationNo",$registrationNo,"dischargedCondition",$dischargedCondition);
 $ro->EditNow("registrationDetails","registrationNo",$registrationNo,"discountType",$discountType);
+$ro->EditNow("registrationDetails","registrationNo",$registrationNo,"interest",$interest);
 $ro->EditNow("registrationDetails","registrationNo",$registrationNo,"tax",$patientTax);
 
 mysql_connect($ro->myHost(),$ro->getUser(),$ro->getPass());
