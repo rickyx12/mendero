@@ -736,7 +736,7 @@ echo "<Td>&nbsp;</td>";
 ***************************************************/
 
 
-/*
+
 if( $ro->getTotal_opd("cashUnpaid","OTHERS",$registrationNo) > 0 ) {
 echo "<td>&nbsp;"; echo number_format($ro->getTotal_opd("cashUnpaid","OTHERS",$registrationNo),2); echo"&nbsp;</td>";
 $cashz += $ro->getTotal_opd("cashUnpaid","OTHERS",$registrationNo);
@@ -746,7 +746,7 @@ echo "<td>&nbsp;</tD>";
 }
 echo "</tr>";
 
-*/
+
 
 
 ///////////////OR/DR/ER FEE
@@ -1688,7 +1688,6 @@ echo "<td>&nbsp;<b>".number_format($hospitalBill_gt + $pf_gt,2)."</b>&nbsp;</tD>
 echo "<td>&nbsp;<b>".number_format($hospitalBill_phic + $pf_phic,2)."</b>&nbsp;</tD>";
 
 echo "<td>&nbsp;<b>".number_format($hospitalBill_company + $pf_company ,2)."</b>&nbsp;</tD>";
-//echo "<td>&nbsp;<b>".number_format($hospitalBill_phic + $pf_phic,2)."</b>&nbsp;</tD>";
 echo "<td>&nbsp;<b>".number_format($hospitalBill_cash + $pf_cash ,2)."</b>&nbsp;</tD>";
 echo "</tr>";
 
@@ -1712,8 +1711,16 @@ echo "<td>&nbsp;".number_format(( $ro->getRegistrationDetails_discount()),2)."&n
 echo "<td>&nbsp;0.00&nbsp;</tD>";
 }
 echo "</tr>";
-//}
 
+if($ro->selectNow("registrationDetails","interest","registrationNo",$registrationNo) > 0) {
+echo "<tr>";
+echo "<td>Interest</td>";
+echo "<td>&nbsp;</td>";
+echo "<td>&nbsp;</td>";
+echo "<td>&nbsp;</td>";
+echo "<td>&nbsp;".number_format($ro->selectNow("registrationDetails","interest","registrationNo",$registrationNo),2)."</td>";
+echo "</tr>";
+}else { }
 
 $gross = (  $cashz - $ro->getPaymentHistory_showUp_returnPaid() );
 $disc = $ro->getRegistrationDetails_discount() * $gross;
@@ -1756,6 +1763,7 @@ $ro->getPHICPayment($registrationNo);
 
 
 echo "<Tr>";
+echo "<td>&nbsp;</tD>";
 echo "<td>&nbsp;</tD>";
 echo "<td>&nbsp;</tD>";
 echo "<td>&nbsp;</tD>";
