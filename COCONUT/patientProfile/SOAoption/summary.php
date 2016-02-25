@@ -1731,7 +1731,6 @@ echo "<td><div align='right' class='Arial12BlackBold'>&nbsp;".number_format($hos
 echo "<td><div align='right' class='Arial12BlackBold'>&nbsp;".number_format($hospitalBill_phic + $pf_phic,2)."&nbsp;</div></tD>";
 
 echo "<td><div align='right' class='Arial12BlackBold'>&nbsp;".number_format($hospitalBill_company + $pf_company ,2)."&nbsp;</div></tD>";
-//echo "<td>&nbsp;<b>".number_format($hospitalBill_phic + $pf_phic,2)."</b>&nbsp;</tD>";
 echo "<td><div align='right' class='Arial12BlackBold'>&nbsp;".number_format($hospitalBill_cash + $pf_cash ,2)."&nbsp;</div></tD>";
 echo "</tr>";
 
@@ -1763,8 +1762,17 @@ echo "<td><div align='right' class='Arial12Black'>&nbsp;0.00&nbsp;</div></tD>";
 }
 echo "</tr>";
 }
-//}
 
+
+if($ro->selectNow("registrationDetails","interest","registrationNo",$registrationNo) > 0) {
+echo "<tr>";
+echo "<td><div align='left' class='Arial12BlackBold'>&nbsp;Interest</div></tD>";
+echo "<td></td>";
+echo "<td></td>";
+echo "<td></td>";
+echo "<td><div align='right' class='Arial12Black'>&nbsp;".$ro->selectNow("registrationDetails","interest","registrationNo",$registrationNo)."&nbsp;</div></tD>";
+echo "</tr>";
+}else { }
 
 $gross = (  $cashz - $ro->getPaymentHistory_showUp_returnPaid() );
 $disc = $ro->getRegistrationDetails_discount() * $gross;
