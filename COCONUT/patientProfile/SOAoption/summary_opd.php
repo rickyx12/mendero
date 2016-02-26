@@ -1717,8 +1717,8 @@ echo "<tr>";
 echo "<td>Interest</td>";
 echo "<td>&nbsp;</td>";
 echo "<td>&nbsp;</td>";
-echo "<td>&nbsp;</td>";
 echo "<td>&nbsp;".number_format($ro->selectNow("registrationDetails","interest","registrationNo",$registrationNo),2)."</td>";
+echo "<td>&nbsp;</td>";
 echo "</tr>";
 }else { }
 

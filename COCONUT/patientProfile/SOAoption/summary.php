@@ -1769,8 +1769,8 @@ echo "<tr>";
 echo "<td><div align='left' class='Arial12BlackBold'>&nbsp;Interest</div></tD>";
 echo "<td></td>";
 echo "<td></td>";
-echo "<td></td>";
 echo "<td><div align='right' class='Arial12Black'>&nbsp;".$ro->selectNow("registrationDetails","interest","registrationNo",$registrationNo)."&nbsp;</div></tD>";
+echo "<td></td>";
 echo "</tr>";
 }else { }
 
