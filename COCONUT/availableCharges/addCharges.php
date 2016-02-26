@@ -18,7 +18,7 @@ $username = $_GET['username'];
 $quantity = $_GET['quantity'];
 $inventoryFrom = $_GET['inventoryFrom'];
 $room = $_GET['room'];
-$paycash = $_GET['paycash'];
+(isset($_GET['paycash'])) ? $paycash = $_GET['paycash'] : $paycash = "";
 
 $ro = new storedProcedure();
 
