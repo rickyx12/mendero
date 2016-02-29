@@ -3705,9 +3705,9 @@ if( $this->selectNow("registeredUser","module","username",$username) == "PHILHEA
 $this->getPatientProfile($registrationNo);
 if( $this->getRegistrationDetails_company() != "" && $this->getRegistrationDetails_type() != "OPD" ) {
 //echo "<td>&nbsp;".number_format($priceOption[1] + ($priceOption[1] * 0.20) ,2)."&nbsp;</td>"; //with addons 
-$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.25));//with addons
+//$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.25));//with addons
 echo "<td>&nbsp;".number_format($this->med_sp,2)."&nbsp;</td>"; //without addons 
-//$this->med_sp = $priceOption[1];//without addons
+$this->med_sp = $priceOption[1];//without addons
 }else {
 echo "<td>&nbsp;".number_format($priceOption[1],2)."&nbsp;</td>";
 $this->med_sp = $priceOption[1];
@@ -3716,9 +3716,9 @@ $this->med_sp = $priceOption[1];
 $this->getPatientProfile($registrationNo);
 if( $this->getRegistrationDetails_company() != "" && $this->getRegistrationDetails_type() != "OPD" ) {
 //echo "<td>&nbsp;".number_format($priceOption[1] + ($priceOption[1] * 0.20) ,2)."&nbsp;</td>"; //with addons 
-$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.25));//with addons
+//$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.25));//with addons
 echo "<td>&nbsp;<font color=red>*********</font></td>"; //without addons 
-//$this->med_sp = $priceOption[1];//without addons
+$this->med_sp = $priceOption[1];//without addons
 }else {
 echo "<td>&nbsp;<font color=red>*********</font></td>";
 $this->med_sp = $priceOption[1];
