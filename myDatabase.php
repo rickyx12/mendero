@@ -3846,7 +3846,8 @@ echo "<td>&nbsp;<a href='#'>".$row['description']."</a>&nbsp;</td>";
 if( $this->selectNow("registeredUser","module","username",$username) == "PHILHEALTH" || $this->selectNow("registeredUser","module","username",$username) == "SUPERVISOR" || $this->selectNow("registeredUser","module","username",$username) == "HMO" || $this->selectNow("registeredUser","module","username",$username) == "CASHIER" || $this->selectNow("registeredUser","module","username",$username) == "BILLING" || $this->selectNow("registeredUser","module","username",$username) == "PHARMACY" ) {
 if( $this->getRegistrationDetails_company() != "" ) { 
 //echo "<td>&nbsp;".($row['unitcost'] + ( $row['unitcost'] * 0.20 ) )."&nbsp;</td>"; //with addons
-$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.25 ) ); //with addons
+//$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.25 ) ); //with addons
+$this->sup_sp = $row['unitcost'];
 echo "<td>&nbsp;".($this->sup_sp)."&nbsp;</td>"; //without addons
 //$this->sup_sp = $row['unitcost']; //without addons
 }else {
@@ -3856,9 +3857,9 @@ $this->sup_sp = $row['unitcost'] ;
 }else { //kpg ndi allowed mkta ng user ang price
 if( $this->getRegistrationDetails_company() != "" ) { 
 //echo "<td>&nbsp;".($row['unitcost'] + ( $row['unitcost'] * 0.20 ) )."&nbsp;</td>"; //with addons
-$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.25 ) ); //with addons
+//$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.25 ) ); //with addons
 echo "<td>&nbsp;<font color=red>******</font></td>"; //without addons
-//$this->sup_sp = $row['unitcost']; //without addons
+$this->sup_sp = $row['unitcost']; //without addons
 }else {
 $this->sup_sp = $row['unitcost'] ;
 echo "<td>&nbsp;<font color=red>******</font></td>";
