@@ -1560,7 +1560,15 @@ echo "</tr>";
 
 
 
-
+if($ro->selectNow("registrationDetails","interest","registrationNo",$registrationNo) > 0) {
+echo "<tr>";
+echo "<td><div align='left' class='Arial12BlackBold'>&nbsp;Interest</div></tD>";
+echo "<td></td>";
+echo "<td></td>";
+echo "<td><div align='right' class='Arial12Black'>&nbsp;".$ro->selectNow("registrationDetails","interest","registrationNo",$registrationNo)."&nbsp;</div></tD>";
+echo "<td></td>";
+echo "</tr>";
+}else { }
 
 
 
@@ -1763,7 +1771,7 @@ echo "<td><div align='right' class='Arial12Black'>&nbsp;0.00&nbsp;</div></tD>";
 echo "</tr>";
 }
 
-
+/*
 if($ro->selectNow("registrationDetails","interest","registrationNo",$registrationNo) > 0) {
 echo "<tr>";
 echo "<td><div align='left' class='Arial12BlackBold'>&nbsp;Interest</div></tD>";
@@ -1773,7 +1781,7 @@ echo "<td><div align='right' class='Arial12Black'>&nbsp;".$ro->selectNow("regist
 echo "<td></td>";
 echo "</tr>";
 }else { }
-
+*/
 $gross = (  $cashz - $ro->getPaymentHistory_showUp_returnPaid() );
 $disc = $ro->getRegistrationDetails_discount() * $gross;
 
