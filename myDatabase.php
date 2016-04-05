@@ -1432,17 +1432,23 @@ echo "<td>&nbsp;".$row['Description']."&nbsp;</td>";
 if( $row['Description'] == "ER FEE" ) {
 $sellingPrice = $row['sellingPrice'];
 }else {
-if( $this->selectNow("registrationDetails","Company","registrationNo",$registrationNo) != "" && $this->selectNow("availableCharges","addons","chargesCode",$row['chargesCode']) != "no" ) {
+if( $this->selectNow("registrationDetails","Company","registrationNo",$registrationNo) != "" && $this->selectNow("availableCharges","addons","chargesCode",$row['chargesCode']) != "no" ) { //check nea kung may company/hmo ung patient
 
 if( $row['Category'] == "LABORATORY" || $row['Category'] == "RADIOLOGY" || $row['Category'] == "CARDIOLOGY" ) { //company addon 
 //$sellingPrice = $row['sellingPrice']; //removed feb 9, 2016
-$sellingPrice = $row['sellingPrice'] + ( $row['sellingPrice'] * 0.25 ); //added feb 9, 2016
+$sellingPrice = $row['sellingPrice'] + ( $row['sellingPrice'] * 0.45 ); //added apr 5, 2016
 }else {
 //$sellingPrice = $row['sellingPrice'] + ( $row['sellingPrice'] * 0.20 ); //removed feb 25, 2015
 $sellingPrice = $row['sellingPrice'];
 }
+}else { //kpag wlang company/hmo ung patient
+if( $this->selectNow("registrationDetails","type","registrationNo",$registrationNo) == "IPD" ) {
+	$sellingPrice = $row['sellingPrice'] + ($row['sellingPrice'] * 0.25 ); //added apr 5, 2016
 }else {
-$sellingPrice = $row['sellingPrice'];
+	$sellingPrice = $row['sellingPrice'] + ($row['sellingPrice'] * 0.10 ); //added apr 5, 2016
+}
+
+
 }
 }
 
@@ -3704,10 +3710,10 @@ if( $this->selectNow("registeredUser","module","username",$username) == "PHILHEA
 
 $this->getPatientProfile($registrationNo);
 if( $this->getRegistrationDetails_company() != "" && $this->getRegistrationDetails_type() != "OPD" ) {
-//echo "<td>&nbsp;".number_format($priceOption[1] + ($priceOption[1] * 0.20) ,2)."&nbsp;</td>"; //with addons 
-//$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.25));//with addons
-echo "<td>&nbsp;".number_format($this->med_sp,2)."&nbsp;</td>"; //without addons 
-$this->med_sp = $priceOption[1];//without addons
+echo "<td>&nbsp;".number_format($priceOption[1] + ($priceOption[1] * 0.60) ,2)."&nbsp;</td>"; //with addons added apr 5,2016
+$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.60));//with addons added apr 5,2016
+//echo "<td>&nbsp;".number_format($this->med_sp,2)."&nbsp;</td>"; //without addons remove apr 5,2016
+//$this->med_sp = $priceOption[1];//without addons remove apr 5,2016
 }else {
 echo "<td>&nbsp;".number_format($priceOption[1],2)."&nbsp;</td>";
 $this->med_sp = $priceOption[1];
@@ -3715,10 +3721,10 @@ $this->med_sp = $priceOption[1];
 }else { //kpg ndi allowed mkta ng user ang price
 $this->getPatientProfile($registrationNo);
 if( $this->getRegistrationDetails_company() != "" && $this->getRegistrationDetails_type() != "OPD" ) {
-//echo "<td>&nbsp;".number_format($priceOption[1] + ($priceOption[1] * 0.20) ,2)."&nbsp;</td>"; //with addons 
-//$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.25));//with addons
+//echo "<td>&nbsp;".number_format($priceOption[1] + ($priceOption[1] * 0.60) ,2)."&nbsp;</td>"; //with addons added apr 5,2016
+$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.60));//with addons added apr 5,2016
 echo "<td>&nbsp;<font color=red>*********</font></td>"; //without addons 
-$this->med_sp = $priceOption[1];//without addons
+//$this->med_sp = $priceOption[1];//without addons
 }else {
 echo "<td>&nbsp;<font color=red>*********</font></td>";
 $this->med_sp = $priceOption[1];
@@ -3845,10 +3851,10 @@ echo "<td>&nbsp;<a href='#'>".$row['description']."</a>&nbsp;</td>";
 
 if( $this->selectNow("registeredUser","module","username",$username) == "PHILHEALTH" || $this->selectNow("registeredUser","module","username",$username) == "SUPERVISOR" || $this->selectNow("registeredUser","module","username",$username) == "HMO" || $this->selectNow("registeredUser","module","username",$username) == "CASHIER" || $this->selectNow("registeredUser","module","username",$username) == "BILLING" || $this->selectNow("registeredUser","module","username",$username) == "PHARMACY" ) {
 if( $this->getRegistrationDetails_company() != "" ) { 
-//echo "<td>&nbsp;".($row['unitcost'] + ( $row['unitcost'] * 0.20 ) )."&nbsp;</td>"; //with addons
-//$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.25 ) ); //with addons
-$this->sup_sp = $row['unitcost'];
-echo "<td>&nbsp;".($this->sup_sp)."&nbsp;</td>"; //without addons
+echo "<td>&nbsp;".($row['unitcost'] + ( $row['unitcost'] * 0.60 ) )."&nbsp;</td>"; //with addons added apr 5, 2016
+$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.60 ) ); //with addons added apr 5, 2016
+//$this->sup_sp = $row['unitcost'];
+//echo "<td>&nbsp;".($this->sup_sp)."&nbsp;</td>"; //without addons
 //$this->sup_sp = $row['unitcost']; //without addons
 }else {
 echo "<td>&nbsp;".$row['unitcost']."&nbsp;</td>";
@@ -3856,10 +3862,10 @@ $this->sup_sp = $row['unitcost'] ;
 }
 }else { //kpg ndi allowed mkta ng user ang price
 if( $this->getRegistrationDetails_company() != "" ) { 
-//echo "<td>&nbsp;".($row['unitcost'] + ( $row['unitcost'] * 0.20 ) )."&nbsp;</td>"; //with addons
-//$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.25 ) ); //with addons
-echo "<td>&nbsp;<font color=red>******</font></td>"; //without addons
-$this->sup_sp = $row['unitcost']; //without addons
+echo "<td>&nbsp;".($row['unitcost'] + ( $row['unitcost'] * 0.60 ) )."&nbsp;</td>"; //with addons added apr 5, 2016
+$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.60 ) ); //with addons added apr 5, 2016
+//echo "<td>&nbsp;<font color=red>******</font></td>"; //without addons
+//$this->sup_sp = $row['unitcost']; //without addons
 }else {
 $this->sup_sp = $row['unitcost'] ;
 echo "<td>&nbsp;<font color=red>******</font></td>";
