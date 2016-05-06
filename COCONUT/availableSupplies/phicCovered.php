@@ -89,7 +89,27 @@ echo $remainingLimit;
 
 
 }else { //ndi cover
-$priceOption =  $ro->selectNow("inventory","unitcost","inventoryCode",$chargesCode); 
+
+//---------------------------------------------------------------------------
+$ipaesql=mysql_query("SELECT description FROM inventorypaexception WHERE description='$description' AND status='Active'");
+$ipaecount=mysql_num_rows($ipaesql);
+
+if($ipaecount==0){
+$pasql=mysql_query("SELECT mstatus, mopd, mopdhmo, mipd FROM priceadjustments WHERE mstatus='on'");
+$pacount=mysql_num_rows($pasql);
+  if($pacount==0){
+  $priceOption =  $ro->selectNow("inventory","unitcost","inventoryCode",$chargesCode);
+  }
+  else{
+  $priceOption =  $sellingPrice;
+  }
+}
+else{
+$priceOption =  $ro->selectNow("inventory","unitcost","inventoryCode",$chargesCode);
+}
+//---------------------------------------------------------------------------
+
+
 $totalPrice = ($priceOption * $quantity); // cashPrice
 
 //check autoDispense????

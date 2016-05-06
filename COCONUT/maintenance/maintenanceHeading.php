@@ -282,6 +282,10 @@ if( $ro->selectNow("reportHeading","information","reportName","nbs") == "Activat
 
                    <li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/masterfile/patientRecord.php?username=<?php echo $username; ?>&desc=&show=All" target='departmentX'>Patient Record</a></li>
 
+                   <li><a href="http://<?php echo $ro->getMyUrl(); ?>/Forms/MedsSupPriceAdjustmentSettings.php?username=<?php echo $username; ?>" target='departmentX'>Medicine/Supply Price Adjustment Settings</a></li>
+
+                   <li><a href="http://<?php echo $ro->getMyUrl(); ?>/Forms/MedsSupPAExceptionList.php?username=<?php echo $username; ?>" target='departmentX'>Medicine/Supply Price Adjustment Exception List</a></li>
+
 </ul>
 </li>           
      

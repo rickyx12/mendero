@@ -36,7 +36,24 @@ $discount = $totalz * 0.20;
 $totalPrice = ( $totalz - $discount );
 }else if( $ro->getPatientRecord_senior() == "NO" && $title == "MEDICINE" && $paycash == "yes" ) {
 $totalz = ($sellingPrice * $quantity);
+//---------------------------------------------------------------------------
+$ipaesql=mysql_query("SELECT description FROM inventorypaexception WHERE description='$description' AND status='Active'");
+$ipaecount=mysql_num_rows($ipaesql);
+
+if($ipaecount==0){
+$pasql=mysql_query("SELECT mstatus, mopd, mopdhmo, mipd FROM priceadjustments WHERE mstatus='on'");
+$pacount=mysql_num_rows($pasql);
+  if($pacount==0){
+  $discount = $totalz * 0.05;
+  }
+  else{
+  $discount = 0;
+  }
+}
+else{
 $discount = $totalz * 0.05;
+}
+//---------------------------------------------------------------------------
 $totalPrice = ( $totalz - $discount );
 }else {
 $discount = 0;

@@ -1436,16 +1436,16 @@ if( $this->selectNow("registrationDetails","Company","registrationNo",$registrat
 
 if( $row['Category'] == "LABORATORY" || $row['Category'] == "RADIOLOGY" || $row['Category'] == "CARDIOLOGY" ) { //company addon 
 //$sellingPrice = $row['sellingPrice']; //removed feb 9, 2016
-$sellingPrice = $row['sellingPrice'] + ( $row['sellingPrice'] * 0.45 ); //added apr 5, 2016
+$sellingPrice = $row['sellingPrice'] + ( $row['sellingPrice'] * 0 ); //added apr 5, 2016
 }else {
 //$sellingPrice = $row['sellingPrice'] + ( $row['sellingPrice'] * 0.20 ); //removed feb 25, 2015
 $sellingPrice = $row['sellingPrice'];
 }
 }else { //kpag wlang company/hmo ung patient
 if( $this->selectNow("registrationDetails","type","registrationNo",$registrationNo) == "IPD" ) {
-	$sellingPrice = $row['sellingPrice'] + ($row['sellingPrice'] * 0.25 ); //added apr 5, 2016
+	$sellingPrice = $row['sellingPrice'] + ($row['sellingPrice'] * 0 ); //added apr 5, 2016
 }else {
-	$sellingPrice = $row['sellingPrice'] + ($row['sellingPrice'] * 0.10 ); //added apr 5, 2016
+	$sellingPrice = $row['sellingPrice'] + ($row['sellingPrice'] * 0 ); //added apr 5, 2016
 }
 
 
@@ -3695,11 +3695,50 @@ echo "<th bgcolor='#3b5998'>&nbsp;<font color=white>&nbsp;</font>&nbsp;</th>";
 //echo "<th bgcolor='#3b5998'>&nbsp;<font color=white>&nbsp;</font>&nbsp;</th>";
 
 echo "</tr>";
-while($row = mysql_fetch_array($result))
-  {
-echo "<tr>";
+while($row = mysql_fetch_array($result)){
+
 $senior = $row['sellingPrice'] * $this->percentage("senior");
-$priceOption = preg_split ("/\_/", $row['Added']); 
+$priceOption = preg_split ("/\_/", $row['Added']);
+
+//Price Adjustment Start-----------------------------------------------------------------------------
+//1 Find If Item is Excempted
+$ipaesql=mysql_query("SELECT description FROM inventorypaexception WHERE description='".$row['description']."' AND status='Active'");
+$ipaecount=mysql_num_rows($ipaesql);
+
+if($ipaecount==0){
+$pasql=mysql_query("SELECT mstatus, mopd, mopdhmo, mipd, mbaseprice FROM priceadjustments WHERE mstatus='on'");
+$pacount=mysql_num_rows($pasql);
+  if($pacount==0){$test12=1;
+  $sp=$priceOption[1];
+  $pcsp=$priceOption[1];
+  }
+  else{
+  while($pafetch=mysql_fetch_array($pasql)){$mopd=$pafetch['mopd'];$mopdhmo=$pafetch['mopdhmo'];$mipd=$pafetch['mipd'];$mbaseprice=$pafetch['mbaseprice'];}
+    if($mbaseprice=="sellingprice"){$baseprice=$priceOption[1];}else if($mbaseprice=="unitprice"){$baseprice=$row['unitcost'];}
+    if($this->selectNow("registrationDetails","type","registrationNo",$registrationNo)=="OPD"){
+      if($this->selectNow("registrationDetails","Company","registrationNo",$registrationNo)!=""){$test12=2;
+      $sp=$baseprice+($baseprice*$mopdhmo);
+      $pcsp=$baseprice+($baseprice*$mopd);
+      }
+      else{$test12=3;
+      $sp=$baseprice+($baseprice*$mopd);
+      $pcsp=$baseprice+($baseprice*$mopd);
+      }
+    }
+    else{$test12=4;
+    $sp=$baseprice+($baseprice*$mipd);
+    $pcsp=$baseprice+($baseprice*$mopd);
+    }
+
+  }
+}
+else{$test12=5;
+$sp=$priceOption[1];
+$pcsp=$priceOption[1];
+}
+//Price Adjustment End-------------------------------------------------------------------------------
+
+echo "<tr>";
 echo "<td>&nbsp;".$row['genericName']."&nbsp;</td>";
 echo "<td>&nbsp;<a href='#'>".$row['description']."</a>&nbsp;</td>";
 echo "<td>&nbsp;".$row['preparation']."&nbsp;</td>";
@@ -3708,28 +3747,94 @@ echo "<td>&nbsp;".$row['preparation']."&nbsp;</td>";
 if( $this->selectNow("registeredUser","module","username",$username) == "PHILHEALTH" || $this->selectNow("registeredUser","module","username",$username) == "SUPERVISOR" || $this->selectNow("registeredUser","module","username",$username) == "HMO" || $this->selectNow("registeredUser","module","username",$username) == "BILLING" || $this->selectNow("registeredUser","module","username",$username) == "CASHIER" || $this->selectNow("registeredUser","module","username",$username) == "PHARMACY" ) {  //kpaag allowed ung user na tumingin ng price
 
 
+//echo "<td>&nbsp;".number_format($priceOption[1],2)."&nbsp;</td>";
 $this->getPatientProfile($registrationNo);
+
+
+
+
 if( $this->getRegistrationDetails_company() != "" && $this->getRegistrationDetails_type() != "OPD" ) {
-echo "<td>&nbsp;".number_format($priceOption[1] + ($priceOption[1] * 0.60) ,2)."&nbsp;</td>"; //with addons added apr 5,2016
-$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.60));//with addons added apr 5,2016
-//echo "<td>&nbsp;".number_format($this->med_sp,2)."&nbsp;</td>"; //without addons remove apr 5,2016
-//$this->med_sp = $priceOption[1];//without addons remove apr 5,2016
-}else {
-echo "<td>&nbsp;".number_format($priceOption[1],2)."&nbsp;</td>";
-$this->med_sp = $priceOption[1];
-}
-}else { //kpg ndi allowed mkta ng user ang price
-$this->getPatientProfile($registrationNo);
-if( $this->getRegistrationDetails_company() != "" && $this->getRegistrationDetails_type() != "OPD" ) {
-//echo "<td>&nbsp;".number_format($priceOption[1] + ($priceOption[1] * 0.60) ,2)."&nbsp;</td>"; //with addons added apr 5,2016
-$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.60));//with addons added apr 5,2016
-echo "<td>&nbsp;<font color=red>*********</font></td>"; //without addons 
+//echo "<td>&nbsp;".number_format($priceOption[1] + ($priceOption[1] * 0.20) ,2)."&nbsp;</td>"; //with addons 
+//$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.20));//with addons
+//echo "<td>&nbsp;".number_format($priceOption[1],2)."&nbsp;</td>"; //without addons 
 //$this->med_sp = $priceOption[1];//without addons
+echo "<td>&nbsp;".number_format($sp,2)."&nbsp;</td>"; //without addons 
+$this->med_sp = $sp;//without addons
+
+}else if( $this->getPatientRecord_phic() == "YES" && $this->getRegistrationDetails_type() != "OPD" ) {
+//echo "<td>&nbsp;".number_format($priceOption[1] + ($priceOption[1] * 0.20) ,2)."&nbsp;</td>"; //with addons
+//$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.20)); //with addons
+//echo "<td>&nbsp;".number_format($priceOption[1],2)."&nbsp;</td>"; //without addons
+//$this->med_sp = $priceOption[1]; //without addons
+echo "<td>&nbsp;".number_format($sp,2)."&nbsp;</td>"; //without addons 
+$this->med_sp = $sp;//without addons
+
 }else {
-echo "<td>&nbsp;<font color=red>*********</font></td>";
-$this->med_sp = $priceOption[1];
+//echo "<td>&nbsp;".number_format($priceOption[1],2)."&nbsp;</td>";
+//$this->med_sp = $priceOption[1];
+echo "<td>&nbsp;".number_format($sp,2)."&nbsp;</td>"; //without addons 
+$this->med_sp = $sp;//without addons
+}
+//$this->med_sp = $priceOption[1];
+
+
+}else { //kpag hndi allowed ung user na tumingin ng price
+//echo "<td><font size=2 color=red>Confidential</font></td>";
+
+if($priceOption[0] == "Additional") {
+if($row['sellingPrice'] > $row['unitcost'] + $priceOption[1] ) {
+echo "<td>&nbsp;".number_format($row['sellingPrice'],2)."&nbsp;</td>";
+$this->med_sp = $row['sellingPrice'];
+}else {
+echo "<td>&nbsp;".number_format($row['unitcost'] + $priceOption[1],2)."&nbsp;</td>";
+$this->med_sp = $row['unitcost'] + $priceOption[1];
 }
 }
+
+
+else if($priceOption[0] == "sellingPrice") {
+//echo "<td>&nbsp;".number_format($priceOption[1],2)."&nbsp;</td>";
+$this->getPatientProfile($registrationNo);
+
+//kapag may PhilHealth at walang HMO/Commpany
+if( $this->getPatientRecord_phic() == "YES" && $this->getRegistrationDetails_company() == "") {
+//echo "<td><font size=2 color=red>&nbsp;".$priceOption[1]."&nbsp;</font></td>";
+echo "<td><font size=2 color=red>&nbsp;".$sp."&nbsp;</font></td>";
+//$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.20)); 
+//$this->med_sp = $priceOption[1];
+$this->med_sp = $sp;
+}
+//kapag walang philhealth at may HMO/Company
+else if( $this->getPatientRecord_phic() == "NO" && $this->getRegistrationDetails_company() != "") {
+//echo "<td><font size=2 color=red>".$priceOption[1]."</font></td>";
+echo "<td><font size=2 color=red>&nbsp;".$sp."&nbsp;</font></td>";
+//$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.20)); 
+//$this->med_sp = $priceOption[1];
+$this->med_sp = $sp;
+}
+//kapag may philhealth at may HMO/Company
+else if( $this->getPatientRecord_phic() == "YES" && $this->getRegistrationDetails_company() != "") {
+//echo "<td><font size=2 color=red>".$priceOption[1]."</font></td>";
+echo "<td><font size=2 color=red>&nbsp;".$sp."&nbsp;</font></td>";
+//$this->med_sp = ($priceOption[1] + ($priceOption[1] * 0.20)); 
+//$this->med_sp = $priceOption[1];
+$this->med_sp = $sp;
+}
+else {
+//echo "<td><font size=2 color=red>".$priceOption[1]."</font></td>";
+echo "<td><font size=2 color=red>&nbsp;".$sp."&nbsp;</font></td>";
+//$this->med_sp = $priceOption[1];
+$this->med_sp = $sp;
+}
+//$this->med_sp = $priceOption[1];
+}else {
+echo "";
+}
+
+
+}
+//////////////////////
+
 
 $expirationstr=strtotime($row['expiration']);
 $expirationfmt=date("M d, Y",$expirationstr);
@@ -3766,18 +3871,20 @@ if( $this->selectNow("registeredUser","module","username",$username) == "PHARMAC
 
 if( $row['inventoryLocation'] == "PHARMACY" ) {
 if( $row['chargeControl'] == "Allow" ) {
-echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/cashQTY.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$this->med_sp."&timeCharge=$serverTime&chargeBy=$username&service=Medication&title=MEDICINE&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=$room&paycash=yes'><font color=red size='2'>Pay Cash</font></a>&nbsp;";
+//echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/cashQTY.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$priceOption[1]."&timeCharge=$serverTime&chargeBy=$username&service=Medication&title=MEDICINE&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=$room&paycash=yes'><font color=red size='2'>Pay Cash</font></a>&nbsp;";
+echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/cashQTY.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$pcsp."&timeCharge=$serverTime&chargeBy=$username&service=Medication&title=MEDICINE&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=$room&paycash=yes'><font color=red size='2'>Pay Cash</font></a>&nbsp;";
 }else {
 echo "<td>&nbsp;<a href='#'><font color=red size='2'>[Locked]</font></a>&nbsp;";
 }
 
 }else {
-echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/cashQTY.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$this->med_sp."&timeCharge=$serverTime&chargeBy=$username&service=Medication&title=MEDICINE&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=$room&paycash=yes'><font color=red size='2'>Pay Cash</font></a>&nbsp;";
+//echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/cashQTY.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$priceOption[1]."&timeCharge=$serverTime&chargeBy=$username&service=Medication&title=MEDICINE&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=$room&paycash=yes'><font color=red size='2'>Pay Cash</font></a>&nbsp;";
+echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/cashQTY.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$pcsp."&timeCharge=$serverTime&chargeBy=$username&service=Medication&title=MEDICINE&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=$room&paycash=yes'><font color=red size='2'>Pay Cash</font></a>&nbsp;";
 }
 
 
 }else {
-echo "<td>&nbsp;</td>";
+
 }
 
 
@@ -3831,7 +3938,7 @@ if (!$con)
 
 mysql_select_db($this->database, $con);
 
-$result = mysql_query("SELECT inventoryCode,description,unitcost,quantity,chargeControl,inventoryLocation FROM inventory WHERE $searchBy like '%%%%%%%%$searchDesc%%%%%%%' and inventoryType = 'supplies' and inventoryLocation = '$searchFrom' and quantity > 0 and status not like 'DELETED_%%%%%%' order by $searchBy asc ");
+$result = mysql_query("SELECT inventoryCode,description,unitcost,quantity,chargeControl,inventoryLocation,suppliesUNITCOST FROM inventory WHERE $searchBy like '%%%%%%%%$searchDesc%%%%%%%' and inventoryType = 'supplies' and inventoryLocation = '$searchFrom' and quantity > 0 and status not like 'DELETED_%%%%%%' order by $searchBy asc ");
 
 echo "<table border=1 cellpadding=0 cellspacing=0 rules=all>";
 echo "<tr>";
@@ -3839,37 +3946,80 @@ echo "<th bgcolor='#3b5998'>&nbsp;<font color=white>Description</font>&nbsp;</th
 echo "<th bgcolor='#3b5998'>&nbsp;<font color=white>Price</font>&nbsp;</th>";
 echo "<th bgcolor='#3b5998'>&nbsp;<font color=white>QTY</font>&nbsp;</th>";
 echo "<th bgcolor='#3b5998'>&nbsp;<font color=white>&nbsp;</font>&nbsp;</th>";
-echo "<th bgcolor='#3b5998'>&nbsp;<font color=white>&nbsp;</font>&nbsp;</th>";
 echo "</tr>";
 while($row = mysql_fetch_array($result))
   {
 $this->getPatientProfile($registrationNo);
 echo "<tr>";
-$senior = $row['unitcost'] * $this->percentage("senior");
+  $senior=$row['unitcost'] * $this->percentage("senior");
 echo "<td>&nbsp;<a href='#'>".$row['description']."</a>&nbsp;</td>";
 
 
+//Price Adjustment Start-----------------------------------------------------------------------------
+//1 Find If Item is Excempted
+$ipaesql=mysql_query("SELECT description FROM inventorypaexception WHERE description='".$row['description']."' AND status='Active'");
+$ipaecount=mysql_num_rows($ipaesql);
+
+if($ipaecount==0){
+$pasql=mysql_query("SELECT sstatus, sopd, sopdhmo, sipd, sbaseprice FROM priceadjustments WHERE sstatus='on'");
+$pacount=mysql_num_rows($pasql);
+  if($pacount==0){
+  $sp=$row['unitcost'];
+  $pcsp=$row['unitcost'];
+  }
+  else{
+  while($pafetch=mysql_fetch_array($pasql)){$sopd=$pafetch['sopd'];$sopdhmo=$pafetch['sopdhmo'];$sipd=$pafetch['sipd'];$sbaseprice=$pafetch['sbaseprice'];}
+    if($sbaseprice=="sellingprice"){$baseprice=$row['unitcost'];}else if($sbaseprice=="unitprice"){$baseprice=$row['suppliesUNITCOST'];}
+    if($this->selectNow("registrationDetails","type","registrationNo",$registrationNo)=="OPD"){
+      if($this->selectNow("registrationDetails","Company","registrationNo",$registrationNo)!=""){
+      $sp=$baseprice+($baseprice*$sopdhmo);
+      $pcsp=$baseprice+($baseprice*$sopd);
+      }
+      else{
+      $sp=$baseprice+($baseprice*$sopd);
+      $pcsp=$baseprice+($baseprice*$sopd);
+      }
+    }
+    else{
+    $sp=$baseprice+($baseprice*$sipd);
+    $pcsp=$baseprice+($baseprice*$sopd);
+    }
+
+  }
+}
+else{
+$sp=$row['unitcost'];
+$pcsp=$row['unitcost'];
+}
+//Price Adjustment End-------------------------------------------------------------------------------
+
 if( $this->selectNow("registeredUser","module","username",$username) == "PHILHEALTH" || $this->selectNow("registeredUser","module","username",$username) == "SUPERVISOR" || $this->selectNow("registeredUser","module","username",$username) == "HMO" || $this->selectNow("registeredUser","module","username",$username) == "CASHIER" || $this->selectNow("registeredUser","module","username",$username) == "BILLING" || $this->selectNow("registeredUser","module","username",$username) == "PHARMACY" ) {
 if( $this->getRegistrationDetails_company() != "" ) { 
-echo "<td>&nbsp;".($row['unitcost'] + ( $row['unitcost'] * 0.60 ) )."&nbsp;</td>"; //with addons added apr 5, 2016
-$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.60 ) ); //with addons added apr 5, 2016
+//echo "<td>&nbsp;".($row['unitcost'] + ( $row['unitcost'] * 0.20 ) )."&nbsp;</td>"; //with addons
+//$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.20 ) ); //with addons
+//echo "<td>&nbsp;".($row['unitcost'])."&nbsp;</td>"; //without addons
+//$this->sup_sp = $row['unitcost']; //without addons
+echo "<td>&nbsp;".($sp)."&nbsp;</td>"; //without addons
+$this->sup_sp = $sp; //without addons
+
+}else if( $this->getPatientRecord_phic() == "YES" ) { 
+//echo "<td>&nbsp;".($row['unitcost'] + ($row['unitcost'] * 0.20 ) )."&nbsp;</td>"; //with addons
+//$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.20 ) ); //with addons
+//echo "<td>&nbsp;".($row['unitcost'])."&nbsp;</td>"; //without addons
+//$this->sup_sp = $row['unitcost']; //without addons
+echo "<td>&nbsp;".($sp)."&nbsp;</td>"; //without addons
+$this->sup_sp = $sp; //without addons
+
+}else {
+//echo "<td>&nbsp;".$row['unitcost']."&nbsp;</td>";
+//$this->sup_sp = $row['unitcost'] ;
+echo "<td>&nbsp;".$sp."&nbsp;</td>";
+$this->sup_sp = $sp;
+}
+}else {
+echo "<td><font size=2 color=red>Confidential</font></td>";
 //$this->sup_sp = $row['unitcost'];
-//echo "<td>&nbsp;".($this->sup_sp)."&nbsp;</td>"; //without addons
-//$this->sup_sp = $row['unitcost']; //without addons
-}else {
-echo "<td>&nbsp;".$row['unitcost']."&nbsp;</td>";
-$this->sup_sp = $row['unitcost'] ;
-}
-}else { //kpg ndi allowed mkta ng user ang price
-if( $this->getRegistrationDetails_company() != "" ) { 
-echo "<td>&nbsp;".($row['unitcost'] + ( $row['unitcost'] * 0.60 ) )."&nbsp;</td>"; //with addons added apr 5, 2016
-$this->sup_sp = ($row['unitcost'] + ($row['unitcost'] * 0.60 ) ); //with addons added apr 5, 2016
-//echo "<td>&nbsp;<font color=red>******</font></td>"; //without addons
-//$this->sup_sp = $row['unitcost']; //without addons
-}else {
-$this->sup_sp = $row['unitcost'] ;
-echo "<td>&nbsp;<font color=red>******</font></td>";
-}
+$this->sup_sp = $sp;
 }
 
 echo "<td>&nbsp;".$row['quantity']."&nbsp;</td>";
@@ -3879,13 +4029,13 @@ echo "<td>&nbsp;".$row['quantity']."&nbsp;</td>";
 if( $row['inventoryLocation'] == "PHARMACY" || $row['inventoryLocation'] == "CSR" ) {
 
 if( $row['chargeControl'] == "Allow" ) {
-echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/quantity.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$this->sup_sp."&timeCharge=$serverTime&chargeBy=$username&service=Others&title=SUPPLIES&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room='><font color=blue>[Add]</font></a>&nbsp;";
+echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/quantity.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$this->sup_sp."&timeCharge=$serverTime&chargeBy=$username&service=Others&title=SUPPLIES&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=&paycash=no'><font color=blue>[Add]</font></a>&nbsp;";
 }else {
 echo "<td>&nbsp;<a href='#'><font color=blue>[Locked]</font></a>&nbsp;";
 }
 
 }else {
-echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/quantity.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$this->sup_sp."&timeCharge=$serverTime&chargeBy=$username&service=Others&title=SUPPLIES&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room='><font color=blue>[Add]</font></a>&nbsp;";
+echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/quantity.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$this->sup_sp."&timeCharge=$serverTime&chargeBy=$username&service=Others&title=SUPPLIES&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=&paycash=no'><font color=blue>[Add]</font></a>&nbsp;";
 }
 
 
@@ -3896,12 +4046,12 @@ if( $this->selectNow("registeredUser","module","username",$username) == "PHARMAC
 
 if( $row['inventoryLocation'] == "PHARMACY" || $row['inventoryLocation'] == "CSR" ) {
 if( $row['chargeControl'] == "Allow" ) {
-echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/quantity.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$this->sup_sp."&timeCharge=$serverTime&chargeBy=$username&service=Medication&title=SUPPLIES&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=".$this->getRegistrationDetails_room()."'><font color=red size=2>Pay Cash</font></a>&nbsp;";
+echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableSupplies/phicQTY.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=$pcsp&timeCharge=$serverTime&chargeBy=$username&service=Medication&title=SUPPLIES&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=&paycash=yes".$this->getRegistrationDetails_room()."'><font color=red size=2>Pay Cash</font></a>&nbsp;";
 }else {
 echo "<td>&nbsp;<a href='#'><font color=red size=2>[Locked]</font></a>&nbsp;";
 }
 }else {
-echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableMedicine/quantity.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=".$this->sup_sp."&timeCharge=$serverTime&chargeBy=$username&service=Medication&title=SUPPLIES&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=".$this->getRegistrationDetails_room()."'><font color=red size=2>Pay Cash</font></a>&nbsp;";
+echo "<td>&nbsp;<a href='http://".$this->getMyUrl()."/COCONUT/availableSupplies/phicQTY.php?status=UNPAID&registrationNo=$registrationNo&chargesCode=$row[inventoryCode]&description=$row[description]&sellingPrice=$pcsp&timeCharge=$serverTime&chargeBy=$username&service=Medication&title=SUPPLIES&paidVia=Cash&cashPaid=0&batchNo=$batchNo&username=$username&inventoryFrom=$searchFrom&discount=0&room=&paycash=no".$this->getRegistrationDetails_room()."'><font color=red size=2>Pay Cash</font></a>&nbsp;";
 }
 
 

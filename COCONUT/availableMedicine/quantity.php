@@ -8,6 +8,7 @@ $sellingPrice = $_GET['sellingPrice'];
 $discount = $_GET['discount'];
 $timeCharge = $_GET['timeCharge'];
 $room = $_GET['room'];
+$paycash = $_GET['paycash'];
 
 
 $chargeBy = $_GET['chargeBy'];
@@ -70,6 +71,7 @@ echo "<input type=hidden name='username' value='$username'>";
 echo "<input type=hidden name='discount' value='$discount'>";
 echo "<input type=hidden name='inventoryFrom' value='$inventoryFrom'>";
 echo "<input type=hidden name='room' value='$room'>";
+echo "<input type=hidden name='paycash' value='$paycash'>";
 echo "</form>";
 echo "</tr>";
 echo "</table>";
