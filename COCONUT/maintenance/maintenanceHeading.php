@@ -161,7 +161,7 @@ body.onload=function() { history.go();  }
 
 <li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/masterfile/charges.php?username=<?php echo $username; ?>&title=RADIOLOGY&show=All" target="departmentX">Radiology Charges</a></li>
 
-<li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/masterfile/charges.php?username=<?php echo $username; ?>&title=NURSING-CHARGES&show=All" target="departmentX">Nursing Charges</a></li>
+<li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/masterfile/charges.php?username=<?php echo $username; ?>&title=Nursing Care&show=All" target="departmentX">Nursing Care</a></li>
 
 <li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/masterfile/charges.php?username=<?php echo $username; ?>&title=MISCELLANEOUS&show=All" target="departmentX">Miscellaneous Charges</a></li>
 
@@ -297,7 +297,7 @@ if( $ro->selectNow("reportHeading","information","reportName","nbs") == "Activat
 
 <li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/maintenance/searchCharges.php?username=<?php echo $username; ?>&title=RADIOLOGY&show=search" target="departmentX">Radiology Charges</a></li>
 
-<li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/maintenance/searchCharges.php?username=<?php echo $username; ?>&title=NURSING-CHARGES&show=search" target="departmentX">Nursing Charges</a></li>
+<li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/maintenance/searchCharges.php?username=<?php echo $username; ?>&title=Nursing Care&show=search" target="departmentX">Nursing Care</a></li>
 
 
 <li><a href="http://<?php echo $ro->getMyUrl(); ?>/COCONUT/maintenance/searchCharges.php?username=<?php echo $username; ?>&title=MISCELLANEOUS&show=search" target="departmentX">Miscellaneous</a></li>
