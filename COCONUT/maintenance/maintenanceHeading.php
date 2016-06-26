@@ -81,7 +81,7 @@ body.onload=function() { history.go();  }
 
 		                    <li><a href="http://<?php echo $ro->getMyUrl(); ?>/Maintenance/addCharges.php?module=RADIOLOGY&username=<?php echo $username; ?>" target="departmentX">Radiology Charges</a></li>
 
-<li><a href="http://<?php echo $ro->getMyUrl(); ?>/Maintenance/addCharges.php?module=NURSING-CHARGES&username=<?php echo $username; ?>" target="departmentX">Nursing Charges</a></li>
+<li><a href="http://<?php echo $ro->getMyUrl(); ?>/Maintenance/addCharges.php?module=Nursing Care&username=<?php echo $username; ?>" target="departmentX">Nursing Care</a></li>
 
 <li><a href="http://<?php echo $ro->getMyUrl(); ?>/Maintenance/addCharges.php?module=MISCELLANEOUS&username=<?php echo $username; ?>" target="departmentX">Miscellaneous</a></li>
 
