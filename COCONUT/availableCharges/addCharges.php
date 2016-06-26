@@ -75,7 +75,7 @@ $currentTotal = $quantity * $sellingPrice;
 
 if( $ro->getPatientRecord_senior() == "YES" && $ro->selectNow("availableCharges","senior","chargesCode",$chargesCode) == "yes" && ($title != "MEDICINE" && $title != 'LABORATORY' ) ) {
 
-$totalDiscount = $currentTotal * 0.20 ;
+$totalDiscount = $currentTotal * 0 ;
 $grandTotal = $currentTotal - $totalDiscount;
 
 }else {
@@ -84,7 +84,7 @@ if(( $ro->selectNow("registrationDetails","type","registrationNo",$registrationN
 
 
 if( $ro->getPatientRecord_senior() == "YES" ) { //check kung senior [20% + 10% = 30%]
-$totalDiscount = $currentTotal * 0.20;
+$totalDiscount = $currentTotal * 0;
 }else {
 //$totalDiscount = $currentTotal * 0.10; //kung walang senior 10% 
 $totalDiscount = 0;
