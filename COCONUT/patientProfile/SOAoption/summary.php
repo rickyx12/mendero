@@ -642,13 +642,13 @@ echo "</tr>";
 
 
 
-/*
+
 echo "<tr>";
-echo "<td>&nbsp;Nursing Charges&nbsp;</td>";
-if( $ro->getTotal("total","NURSING-CHARGES",$registrationNo) > 0 ) {
-echo "<td>&nbsp;"; echo number_format($ro->getTotal("total","NURSING-CHARGES",$registrationNo),2); echo"&nbsp;</td>";
-$gt+=$ro->getTotal("total","NURSING-CHARGES",$registrationNo);
-$hospitalBill_gt += $ro->getTotal("total","NURSING-CHARGES",$registrationNo);
+echo "<td align='left' class='Arial11BlackBold'>&nbsp;Nursing Care&nbsp;</td>";
+if( $ro->getTotal("total","Nursing Care",$registrationNo) > 0 ) {
+echo "<td align='right' class='Arial11Black'>&nbsp;"; echo number_format($ro->getTotal("total","Nursing Care",$registrationNo),2); echo"&nbsp;</td>";
+$gt+=$ro->getTotal("total","Nursing Care",$registrationNo);
+$hospitalBill_gt += $ro->getTotal("total","Nursing Care",$registrationNo);
 }else {
 echo "<Td>&nbsp;</td>";
 }
@@ -656,10 +656,10 @@ echo "<Td>&nbsp;</td>";
 
 
    /////////// PHIC NURSING-CHARGES
-if( $ro->getTotal("phic","NURSING-CHARGES",$registrationNo) > 0 ) {
-echo "<td>&nbsp;"; echo number_format($ro->getTotal("phic","NURSING-CHARGES",$registrationNo),2); echo"&nbsp;</td>";
-$phicz+=$ro->getTotal("phic","NURSING-CHARGES",$registrationNo);
-$hospitalBill_phic += $ro->getTotal("phic","NURSING-CHARGES",$registrationNo);
+if( $ro->getTotal("phic","Nursing Care",$registrationNo) > 0 ) {
+echo "<td align='right' class='Arial11Black'>&nbsp;"; echo number_format($ro->getTotal("phic","Nursing Care",$registrationNo),2); echo"&nbsp;</td>";
+$phicz+=$ro->getTotal("phic","Nursing Care",$registrationNo);
+$hospitalBill_phic += $ro->getTotal("phic","Nursing Care",$registrationNo);
 }else {
 echo "<Td>&nbsp;</td>";
 }
@@ -667,10 +667,10 @@ echo "<Td>&nbsp;</td>";
 
 
     ////////// COMPANY NURSING-CHARGES
-if( $ro->getTotal("company","NURSING-CHARGES",$registrationNo) > 0 ) {
-echo "<td>&nbsp;"; echo number_format($ro->getTotal("company","NURSING-CHARGES",$registrationNo),2); echo"&nbsp;</td>";
-$company+=$ro->getTotal("company","NURSING-CHARGES",$registrationNo);
-$hospitalBill_company += $ro->getTotal("company","NURSING-CHARGES",$registrationNo);
+if( $ro->getTotal("company","Nursing Care",$registrationNo) > 0 ) {
+echo "<td align='right' class='Arial11Black'>&nbsp;"; echo number_format($ro->getTotal("company","Nursing Care",$registrationNo),2); echo"&nbsp;</td>";
+$company+=$ro->getTotal("company","Nursing Care",$registrationNo);
+$hospitalBill_company += $ro->getTotal("company","Nursing Care",$registrationNo);
 }else {
 echo "<tD>&nbsp;</tD>";
 }
@@ -688,16 +688,16 @@ echo "<Td>&nbsp;</td>";
 }
 *******************************************/
 
-/*
-if( $ro->getTotal("cashUnpaid","NURSING-CHARGES",$registrationNo) > 0 ) {
-echo "<td>&nbsp;"; echo number_format($ro->getTotal("cashUnpaid","NURSING-CHARGES",$registrationNo),2); echo"&nbsp;</td>";
-$cashz += $ro->getTotal("cashUnpaid","NURSING-CHARGES",$registrationNo);
-$hospitalBill_cash += $ro->getTotal("cashUnpaid","NURSING-CHARGES",$registrationNo);
+
+if( $ro->getTotal("cashUnpaid","Nursing Care",$registrationNo) > 0 ) {
+echo "<td align='right' class='Arial11Black'>&nbsp;"; echo number_format($ro->getTotal("cashUnpaid","Nursing Care",$registrationNo),2); echo"&nbsp;</td>";
+$cashz += $ro->getTotal("cashUnpaid","Nursing Care",$registrationNo);
+$hospitalBill_cash += $ro->getTotal("cashUnpaid","Nursing Care",$registrationNo);
 }else {
 echo "<td>&nbsp;</tD>";
 }
 echo "</tr>";
-*/
+
 
 
 echo "<tr>";
